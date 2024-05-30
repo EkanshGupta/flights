@@ -26,8 +26,6 @@ def request_flights(tfs: TFSData, **kwargs: Any) -> requests.Response:
             headers={"user-agent": ua, "accept-language": "en"},
             **kwargs
         )
-#         print(tfs.as_b64())
-#         print(tfs.to_string())
         r.raise_for_status()
     except requests.exceptions.RequestException as e:  # This is the correct syntax
         print(e)
@@ -123,6 +121,8 @@ def get_flights(tfs: TFSData, **kwargs: Any) -> Result:
     if rs==-1:
         return []
 #     mid = time.time()
+    with open("new1.html","w") as f:
+        f.write(rs.text)
     results = parse_response(rs)
 #     end = time.time()
 #     print("Request function call: ",mid-start)

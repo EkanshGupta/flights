@@ -1,5 +1,5 @@
 from .core import get_flights
-from .flights_impl import Airport, TFSData, FlightData, Passengers
+from .flights_impl import Airport, TFSData, FlightData, Passengers, Bags
 from .schema import Result, Flight
 from .filter import create_filter
 from .search import search_airport

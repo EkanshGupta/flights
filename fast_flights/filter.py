@@ -1,10 +1,11 @@
 from typing import Literal, List
-from .flights_impl import FlightData, Passengers, TFSData
+from .flights_impl import FlightData, Passengers, TFSData, Bags
 
 
 def create_filter(
     *,
     flight_data: List[FlightData],
+    bags: Bags,
     trip: Literal["round-trip", "one-way", "multi-city"],
     passengers: Passengers,
     seat: Literal["economy", "premium-economy", "business", "first"],
@@ -18,5 +19,5 @@ def create_filter(
         seat ("economy" | "premium-economy" | "business" | "first"): Seat.
     """
     return TFSData.from_interface(
-        flight_data=flight_data, trip=trip, passengers=passengers, seat=seat
+        flight_data=flight_data, bags=bags, trip=trip, passengers=passengers, seat=seat
     )

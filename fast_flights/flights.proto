@@ -10,11 +10,9 @@ message FlightData {
  Airport to_flight = 14;
 }
 
-enum Bags {
- IGNORE0 = 0;
- IGNORE1 = 1;
- CARRY_ON = 2;
- CHECKED = 3;
+message Bags {
+ int32 carryon = 2;
+ int32 checked = 3;
 }
 
 enum Seat {

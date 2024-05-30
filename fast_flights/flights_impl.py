@@ -3,12 +3,41 @@
 import base64
 from typing import Any, List, TYPE_CHECKING, Literal, Union
 
-from . import flights_pb2 as PB
+from . import flights_pb2_new as PB
 from ._generated_enum import Airport
 
 if TYPE_CHECKING:
     PB: Any
 
+class Bags:
+    """Represents bags
+    Args:
+        carryon (int): number of carryons.
+        checked (int): number of checked bags.
+    """
+
+    __slots__ = ("carryon", "checked")
+    carryon: int
+    checked: int
+
+    def __init__(
+        self,
+        *,
+        carryon: int,
+        checked: int
+    ):
+        self.carryon = carryon
+        self.checked = checked
+
+    def attach(self, info: PB.Info) -> None:  # type: ignore
+        info.bags.carryon = self.carryon
+        info.bags.checked = self.checked
+
+    def __repr__(self) -> str:
+        return (
+            f"Bags(carryon={self.carryon}, "
+            f"checked={self.checked})"
+        )
 
 class FlightData:
     """Represents flight data.
@@ -95,11 +124,13 @@ class TFSData:
         self,
         *,
         flight_data: List[FlightData],
+        bags: Bags,
         seat: PB.Seat,  # type: ignore
         trip: PB.Trip,  # type: ignore
         passengers: Passengers,
     ):
         self.flight_data = flight_data
+        self.bags = bags
         self.seat = seat
         self.trip = trip
         self.passengers = passengers
@@ -110,6 +141,7 @@ class TFSData:
         info.trip = self.trip
 
         self.passengers.attach(info)
+        self.bags.attach(info)
 
         for fd in self.flight_data:
             fd.attach(info)
@@ -126,6 +158,7 @@ class TFSData:
     def from_interface(
         *,
         flight_data: List[FlightData],
+        bags: Bags,
         trip: Literal["round-trip", "one-way", "multi-city"],
         passengers: Passengers,
         seat: Literal["economy", "premium-economy", "business", "first"],
@@ -151,8 +184,8 @@ class TFSData:
         }[seat]
 
         return TFSData(
-            flight_data=flight_data, seat=seat_t, trip=trip_t, passengers=passengers
+            flight_data=flight_data, bags=bags, seat=seat_t, trip=trip_t, passengers=passengers
         )
 
     def __repr__(self) -> str:
-        return f"TFSData({'hello'!r}, flight_data={self.flight_data!r})"
+        return f"flight_data={self.flight_data},bags={self.bags},trip={self.trip},passengers={self.passengers},seat={self.seat})"

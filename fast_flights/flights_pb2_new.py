@@ -20,40 +20,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\rflights.proto\"\x1a\n\x07\x41irport\x12\x0f\n\x07\x61irport\x18\x02 \x01(\t\"V\n\nFlightData\x12\x0c\n\x04\x64\x61te\x18\x02 \x01(\t\x12\x1d\n\x0b\x66rom_flight\x18\r \x01(\x0b\x32\x08.Airport\x12\x1b\n\tto_flight\x18\x0e \x01(\x0b\x32\x08.Airport\"\x80\x01\n\x04Info\x12\x19\n\x04\x64\x61ta\x18\x03 \x03(\x0b\x32\x0b.FlightData\x12\x13\n\x04seat\x18\t \x01(\x0e\x32\x05.Seat\x12\x1e\n\npassengers\x18\x08 \x03(\x0e\x32\n.Passenger\x12\x13\n\x04\x62\x61gs\x18\r \x01(\x0e\x32\x05.Bags\x12\x13\n\x04trip\x18\x13 \x01(\x0e\x32\x05.Trip*;\n\x04\x42\x61gs\x12\x0b\n\x07IGNORE0\x10\x00\x12\x0b\n\x07IGNORE1\x10\x01\x12\x0c\n\x08\x43\x41RRY_ON\x10\x02\x12\x0b\n\x07\x43HECKED\x10\x03*S\n\x04Seat\x12\x10\n\x0cUNKNOWN_SEAT\x10\x00\x12\x0b\n\x07\x45\x43ONOMY\x10\x01\x12\x13\n\x0fPREMIUM_ECONOMY\x10\x02\x12\x0c\n\x08\x42USINESS\x10\x03\x12\t\n\x05\x46IRST\x10\x04*E\n\x04Trip\x12\x10\n\x0cUNKNOWN_TRIP\x10\x00\x12\x0e\n\nROUND_TRIP\x10\x01\x12\x0b\n\x07ONE_WAY\x10\x02\x12\x0e\n\nMULTI_CITY\x10\x03*_\n\tPassenger\x12\x15\n\x11UNKNOWN_PASSENGER\x10\x00\x12\t\n\x05\x41\x44ULT\x10\x01\x12\t\n\x05\x43HILD\x10\x02\x12\x12\n\x0eINFANT_IN_SEAT\x10\x03\x12\x11\n\rINFANT_ON_LAP\x10\x04\x62\x06proto3')
+  serialized_pb=_b('\n\rflights.proto\"\x1a\n\x07\x41irport\x12\x0f\n\x07\x61irport\x18\x02 \x01(\t\"V\n\nFlightData\x12\x0c\n\x04\x64\x61te\x18\x02 \x01(\t\x12\x1d\n\x0b\x66rom_flight\x18\r \x01(\x0b\x32\x08.Airport\x12\x1b\n\tto_flight\x18\x0e \x01(\x0b\x32\x08.Airport\"(\n\x04\x42\x61gs\x12\x0f\n\x07\x63\x61rryon\x18\x02 \x01(\x05\x12\x0f\n\x07\x63hecked\x18\x03 \x01(\x05\"\x80\x01\n\x04Info\x12\x19\n\x04\x64\x61ta\x18\x03 \x03(\x0b\x32\x0b.FlightData\x12\x13\n\x04seat\x18\t \x01(\x0e\x32\x05.Seat\x12\x1e\n\npassengers\x18\x08 \x03(\x0e\x32\n.Passenger\x12\x13\n\x04\x62\x61gs\x18\r \x01(\x0b\x32\x05.Bags\x12\x13\n\x04trip\x18\x13 \x01(\x0e\x32\x05.Trip*S\n\x04Seat\x12\x10\n\x0cUNKNOWN_SEAT\x10\x00\x12\x0b\n\x07\x45\x43ONOMY\x10\x01\x12\x13\n\x0fPREMIUM_ECONOMY\x10\x02\x12\x0c\n\x08\x42USINESS\x10\x03\x12\t\n\x05\x46IRST\x10\x04*E\n\x04Trip\x12\x10\n\x0cUNKNOWN_TRIP\x10\x00\x12\x0e\n\nROUND_TRIP\x10\x01\x12\x0b\n\x07ONE_WAY\x10\x02\x12\x0e\n\nMULTI_CITY\x10\x03*_\n\tPassenger\x12\x15\n\x11UNKNOWN_PASSENGER\x10\x00\x12\t\n\x05\x41\x44ULT\x10\x01\x12\t\n\x05\x43HILD\x10\x02\x12\x12\n\x0eINFANT_IN_SEAT\x10\x03\x12\x11\n\rINFANT_ON_LAP\x10\x04\x62\x06proto3')
 )
 
-_BAGS = _descriptor.EnumDescriptor(
-  name='Bags',
-  full_name='Bags',
-  filename=None,
-  file=DESCRIPTOR,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='IGNORE0', index=0, number=0,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='IGNORE1', index=1, number=1,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='CARRY_ON', index=2, number=2,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='CHECKED', index=3, number=3,
-      serialized_options=None,
-      type=None),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=264,
-  serialized_end=323,
-)
-_sym_db.RegisterEnumDescriptor(_BAGS)
-
-Bags = enum_type_wrapper.EnumTypeWrapper(_BAGS)
 _SEAT = _descriptor.EnumDescriptor(
   name='Seat',
   full_name='Seat',
@@ -83,8 +52,8 @@ _SEAT = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=325,
-  serialized_end=408,
+  serialized_start=306,
+  serialized_end=389,
 )
 _sym_db.RegisterEnumDescriptor(_SEAT)
 
@@ -114,8 +83,8 @@ _TRIP = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=410,
-  serialized_end=479,
+  serialized_start=391,
+  serialized_end=460,
 )
 _sym_db.RegisterEnumDescriptor(_TRIP)
 
@@ -149,16 +118,12 @@ _PASSENGER = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=481,
-  serialized_end=576,
+  serialized_start=462,
+  serialized_end=557,
 )
 _sym_db.RegisterEnumDescriptor(_PASSENGER)
 
 Passenger = enum_type_wrapper.EnumTypeWrapper(_PASSENGER)
-IGNORE0 = 0
-IGNORE1 = 1
-CARRY_ON = 2
-CHECKED = 3
 UNKNOWN_SEAT = 0
 ECONOMY = 1
 PREMIUM_ECONOMY = 2
@@ -252,6 +217,44 @@ _FLIGHTDATA = _descriptor.Descriptor(
 )
 
 
+_BAGS = _descriptor.Descriptor(
+  name='Bags',
+  full_name='Bags',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='carryon', full_name='Bags.carryon', index=0,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='checked', full_name='Bags.checked', index=1,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=133,
+  serialized_end=173,
+)
+
+
 _INFO = _descriptor.Descriptor(
   name='Info',
   full_name='Info',
@@ -282,8 +285,8 @@ _INFO = _descriptor.Descriptor(
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='bags', full_name='Info.bags', index=3,
-      number=13, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
+      number=13, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -306,8 +309,8 @@ _INFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=134,
-  serialized_end=262,
+  serialized_start=176,
+  serialized_end=304,
 )
 
 _FLIGHTDATA.fields_by_name['from_flight'].message_type = _AIRPORT
@@ -315,12 +318,12 @@ _FLIGHTDATA.fields_by_name['to_flight'].message_type = _AIRPORT
 _INFO.fields_by_name['data'].message_type = _FLIGHTDATA
 _INFO.fields_by_name['seat'].enum_type = _SEAT
 _INFO.fields_by_name['passengers'].enum_type = _PASSENGER
-_INFO.fields_by_name['bags'].enum_type = _BAGS
+_INFO.fields_by_name['bags'].message_type = _BAGS
 _INFO.fields_by_name['trip'].enum_type = _TRIP
 DESCRIPTOR.message_types_by_name['Airport'] = _AIRPORT
 DESCRIPTOR.message_types_by_name['FlightData'] = _FLIGHTDATA
+DESCRIPTOR.message_types_by_name['Bags'] = _BAGS
 DESCRIPTOR.message_types_by_name['Info'] = _INFO
-DESCRIPTOR.enum_types_by_name['Bags'] = _BAGS
 DESCRIPTOR.enum_types_by_name['Seat'] = _SEAT
 DESCRIPTOR.enum_types_by_name['Trip'] = _TRIP
 DESCRIPTOR.enum_types_by_name['Passenger'] = _PASSENGER
@@ -339,6 +342,13 @@ FlightData = _reflection.GeneratedProtocolMessageType('FlightData', (_message.Me
   # @@protoc_insertion_point(class_scope:FlightData)
   ))
 _sym_db.RegisterMessage(FlightData)
+
+Bags = _reflection.GeneratedProtocolMessageType('Bags', (_message.Message,), dict(
+  DESCRIPTOR = _BAGS,
+  __module__ = 'flights_pb2'
+  # @@protoc_insertion_point(class_scope:Bags)
+  ))
+_sym_db.RegisterMessage(Bags)
 
 Info = _reflection.GeneratedProtocolMessageType('Info', (_message.Message,), dict(
   DESCRIPTOR = _INFO,
