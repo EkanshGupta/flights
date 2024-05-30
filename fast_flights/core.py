@@ -26,13 +26,13 @@ def request_flights(tfs: TFSData, **kwargs: Any) -> requests.Response:
             headers={"user-agent": ua, "accept-language": "en"},
             **kwargs
         )
-        print(tfs.as_b64())
-        print(tfs.to_string())
+#         print(tfs.as_b64())
+#         print(tfs.to_string())
         r.raise_for_status()
     except requests.exceptions.RequestException as e:  # This is the correct syntax
         print(e)
         return -1
-    print("http time: ",r.elapsed.total_seconds())
+#     print("http time: ",r.elapsed.total_seconds())
     print(r)
     return r
 
@@ -118,14 +118,14 @@ def parse_response(r: requests.Response) -> Result:
 
 
 def get_flights(tfs: TFSData, **kwargs: Any) -> Result:
-    start = time.time()
+#     start = time.time()
     rs = request_flights(tfs, **kwargs)
     if rs==-1:
         return []
-    mid = time.time()
+#     mid = time.time()
     results = parse_response(rs)
-    end = time.time()
-    print("Request function call: ",mid-start)
-    print("Parse function call: ",end-mid)
+#     end = time.time()
+#     print("Request function call: ",mid-start)
+#     print("Parse function call: ",end-mid)
 
     return results

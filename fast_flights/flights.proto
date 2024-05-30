@@ -11,6 +11,8 @@ message FlightData {
 }
 
 enum Bags {
+ IGNORE0 = 0;
+ IGNORE1 = 1;
  CARRY_ON = 2;
  CHECKED = 3;
 }

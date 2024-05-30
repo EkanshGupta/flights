@@ -1,4 +1,37 @@
 <div align="center">
+    
+## Flight Database 
+    
+This codebase returns available flights on some chosen routes and stores them in the database. 
+There are some departure and arrival cities of interest stored in a list = C1 pairs intl, C2 pairs domestic
+Each pair will also have a list of itinerary dates. For instance a pair can have 3,5,7 day itineraries whereas another pair can have 15,20,30,35 day itinerary durations = D pairs on an average per pair per international city pair
+The code will generate 100 day itineraries per pair per itinerary duration during a year = C1*D*100
+This does not apply to domestic city pairs as we will store 365 one-ways and 365 return ways for all days of the year for those = C2*730
+Most international itinerary durations would be 7, 9, 10, 15 for holiday destinations and 24, 27, 30, 33, 36 for home trips
+Example of international destinations is Paris, Italy, Germany, Switzerland, Spain, Greece, Egypt, Cancun, Japan, India
+Example of domestic destinations is Hawaii, Seattle, Denver, San diego, NYC, DC, Dallas, Vegas, Arizona, SF
+Total queries per day will be C1*D*100 + C2*730 = 4000 + 7300 = less than 12000
+If each query takes 1/6 minute (timeout value), then 12000 queries is 2000 minutes which is too much
+    
+    
+The database will be ordered using the following tokens:
+    1. Origin City
+    2. destination City
+    3. Departure date
+    4. Departure month
+    5. Departure year
+    9. Airline
+    10. Number of days
+    11. price
+    12. Data search date
+    13. Days ahead of departure flight
+    14. Flight duration
+    15. flight depart time
+    16. flight arrival time
+    17. Stops
+    18. Stops text
+    
+
 
 # flights (fast-flights)
 
