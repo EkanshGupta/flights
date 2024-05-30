@@ -19,4 +19,6 @@ class Flight:
     arrival_time_ahead: str
     duration: str
     stops: int
+    stops_text: str
     delay: Optional[str]
+    price: str

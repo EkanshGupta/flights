@@ -10,6 +10,11 @@ message FlightData {
  Airport to_flight = 14;
 }
 
+enum Bags {
+ CARRY_ON = 2;
+ CHECKED = 3;
+}
+
 enum Seat {
   UNKNOWN_SEAT = 0;
   ECONOMY = 1;
@@ -37,5 +42,6 @@ message Info {
   repeated FlightData data = 3;
   Seat seat = 9;
   repeated Passenger passengers = 8;
+  Bags bags = 13;
   Trip trip = 19;
 }

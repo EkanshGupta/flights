@@ -4,6 +4,8 @@ from selectolax.lexbor import LexborHTMLParser, LexborNode
 
 from .flights_impl import TFSData
 from .schema import Flight, Result
+from .helper import *
+import time
 
 ua = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -13,6 +15,28 @@ ua = (
 
 
 def request_flights(tfs: TFSData, **kwargs: Any) -> requests.Response:
+    try:
+        r = requests.get(
+            "https://www.google.com/travel/flights",
+            params={
+                "tfs": tfs.as_b64(),
+                "hl": "en",
+                "tfu": "EgQIABABIgA",  # show all flights and prices condition
+            },
+            headers={"user-agent": ua, "accept-language": "en"},
+            **kwargs
+        )
+        print(tfs.as_b64())
+        print(tfs.to_string())
+        r.raise_for_status()
+    except requests.exceptions.RequestException as e:  # This is the correct syntax
+        print(e)
+        return -1
+    print("http time: ",r.elapsed.total_seconds())
+    print(r)
+    return r
+
+def request_flights_http(tfs: TFSData, **kwargs: Any) -> requests.Response:
     r = requests.get(
         "https://www.google.com/travel/flights",
         params={
@@ -48,9 +72,10 @@ def parse_response(r: requests.Response) -> Result:
 
         for item in fl.css("ul.Rk10dc li")[:-1]:  # <-- last one would crash
             # Flight name
-            name = safe(item.css_first("div.sSHqwe.tPgKwe.ogfYpf span")).text(
+            name = safe(item.css_first("div.sSHqwe.tPgKwe.ogfYpf")).text(
                 strip=True
             )
+            name = process_name(name)
 
             # Get departure & arrival time
             dp_ar_node = item.css("span.mv1WYe div")
@@ -65,9 +90,11 @@ def parse_response(r: requests.Response) -> Result:
 
             # Get flight stops
             stops = safe(item.css_first(".BbR8Ec .ogfYpf")).text()
+            stops_text = safe(item.css_first(".BbR8Ec .sSHqwe.tPgKwe.ogfYpf")).attributes["aria-label"]
 
             # Get delay
             delay = safe(item.css_first(".GsCCve")).text() or None
+            price = safe(item.css_first(".YMlIz.FpEdX")).text()
 
             flights.append(
                 {
@@ -78,7 +105,9 @@ def parse_response(r: requests.Response) -> Result:
                     "arrival_time_ahead": time_ahead,
                     "duration": duration,
                     "stops": 0 if stops == "Nonstop" else int(stops.split(" ", 1)[0]),
+                    "stops_text": stops_text,
                     "delay": delay,
+                    "price": price,
                 }
             )
 
@@ -89,7 +118,14 @@ def parse_response(r: requests.Response) -> Result:
 
 
 def get_flights(tfs: TFSData, **kwargs: Any) -> Result:
+    start = time.time()
     rs = request_flights(tfs, **kwargs)
+    if rs==-1:
+        return []
+    mid = time.time()
     results = parse_response(rs)
+    end = time.time()
+    print("Request function call: ",mid-start)
+    print("Parse function call: ",end-mid)
 
     return results
