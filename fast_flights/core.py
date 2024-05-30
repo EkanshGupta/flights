@@ -4,7 +4,7 @@ from selectolax.lexbor import LexborHTMLParser, LexborNode
 
 from .flights_impl import TFSData
 from .schema import Flight, Result
-from .helper import *
+import helper
 import time
 
 ua = (
@@ -12,18 +12,18 @@ ua = (
     "AppleWebKit/537.36 (KHTML, like Gecko) "
     "Chrome/123.0.0.0 Safari/537.36 OPR/109.0.0.0"
 )
-
+session = requests.Session()
 
 def request_flights(tfs: TFSData, **kwargs: Any) -> requests.Response:
     try:
-        r = requests.get(
+        r = session.get(
             "https://www.google.com/travel/flights",
             params={
                 "tfs": tfs.as_b64(),
                 "hl": "en",
                 "tfu": "EgQIABABIgA",  # show all flights and prices condition
             },
-            headers={"user-agent": ua, "accept-language": "en"},
+            headers={"User-Agent": ua, "accept-language": "en"},
             **kwargs
         )
         r.raise_for_status()
@@ -31,7 +31,7 @@ def request_flights(tfs: TFSData, **kwargs: Any) -> requests.Response:
         print(e)
         return -1
 #     print("http time: ",r.elapsed.total_seconds())
-    print(r)
+#     print(r)
     return r
 
 def request_flights_http(tfs: TFSData, **kwargs: Any) -> requests.Response:
@@ -58,6 +58,7 @@ def parse_response(r: requests.Response) -> Result:
             return []
 
     blank = _blank()
+#     print(r.url)
 
     def safe(n: Optional[LexborNode]):
         return n or blank
@@ -73,7 +74,7 @@ def parse_response(r: requests.Response) -> Result:
             name = safe(item.css_first("div.sSHqwe.tPgKwe.ogfYpf")).text(
                 strip=True
             )
-            name = process_name(name)
+            name = helper.process_name(name)
 
             # Get departure & arrival time
             dp_ar_node = item.css("span.mv1WYe div")
@@ -121,8 +122,8 @@ def get_flights(tfs: TFSData, **kwargs: Any) -> Result:
     if rs==-1:
         return []
 #     mid = time.time()
-    with open("new1.html","w") as f:
-        f.write(rs.text)
+#     with open("new1.html","w") as f:
+#         f.write(rs.text)
     results = parse_response(rs)
 #     end = time.time()
 #     print("Request function call: ",mid-start)
