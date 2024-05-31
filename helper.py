@@ -209,25 +209,18 @@ def update_dict(itin_dict, folder_path, date_today_file, mode):
         filter = create_flight_filter(key, mode, origin, destination, departure_date, return_date)
         result = get_flights_wrapper(filter, cookies)
         if result == []:
-#             print("Will retry, exception occured")
             num_unfinished+=1
             continue
         if len(result.flights)==0:
-#             print("0 flights returned. Will retry")
             num_unfinished+=1
             continue    
         for i in range(len(result.flights)):
             fl = result.flights[i]
-    #         print(fl.price)
             new_dict = append_itin_to_dict(new_dict, fl, departure_day, departure_month, departure_year,\
                                                  origin, destination, days_ahead,days)
-#         print(len(result.flights)," flights found")
         itin_dict[key] = new_dict
-    #     createDfAndPrint(new_dict)
         save_prog_count+=1
         end = time.time()
-#         print(key," completed")
-#         print("time_elapsed: ",end-start)
     progress_bar.close()
     save_prog(itin_dict, folder_path+date_today_file)
     return num_unfinished

@@ -5,18 +5,22 @@
 </div>
 
 I modified the original fork to add some new features
+
+1. You can now add a carry-on or a checked bag in the request
+2. The code also returns the price of the each flight and the information about stops (number of stops, stoppage airports and timings)
+3. You can now specify a list of airports of interest and the number of days in a desired itinerary and the algorithm will aggregate all itineries from today to one year from now and add it to a dictionary
+4. For domestic itineraries, it searches every day until one-year from now and on international flights, it searches 100 random dates with the fixed duration and stores them
     
-This codebase returns available flights on some chosen routes and stores them in the database.
-  
-This code makes roughly 7000 and 4000 google flight queries per run
+This code makes roughly 700 and 100 google flight queries per run for domestic and international itineraries respectively
     
-The protobuf installation version should be 3.20. Install it using
+The code only runs using protobuf 3.20.0 Install it using
     
 ```python
     
    pip install protobuf==3.20. 
     
 ```
+It also requires tqdm for progress bar updates
 
 The fast, robust, strongly-typed Google Flights scraper (API) implemented in Python. Based on Base64-encoded Protobuf string.
 
