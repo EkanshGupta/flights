@@ -2,6 +2,8 @@
     
 ## Flight Database 
     
+</div>
+
 I modified the original fork to add some new features
     
 This codebase returns available flights on some chosen routes and stores them in the database.
@@ -16,16 +18,13 @@ The protobuf installation version should be 3.20. Install it using
     
 ```
 
-
-# flights (fast-flights)
-
 The fast, robust, strongly-typed Google Flights scraper (API) implemented in Python. Based on Base64-encoded Protobuf string.
 
 ```haskell
 $ pip install fast-flights
 ```
 
-</div>
+
 
 ## Usage
 
