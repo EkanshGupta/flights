@@ -20,7 +20,15 @@ The code only runs using protobuf 3.20.0 Install it using
    pip install protobuf==3.20. 
     
 ```
-It also requires tqdm for progress bar updates
+It also requires tqdm for progress bar updates. Install the following dependencies for the code to run
+
+```python
+pip install --upgrade google-api-python-client
+pip install selectolax
+pip install tqdm
+
+
+```
 
 The fast, robust, strongly-typed Google Flights scraper (API) implemented in Python. Based on Base64-encoded Protobuf string.
 
