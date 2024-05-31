@@ -9,6 +9,8 @@ import time
 from ipywidgets import IntProgress
 from IPython.display import display
 from tqdm.notebook import tqdm
+from os import listdir
+from os.path import isfile, join
 
 PROCESS_STR="Learn more"
 LOWERCASE_STR="abcdefghijklmnopqrstuvwxyz"
@@ -17,6 +19,66 @@ EXCEPT_LIST = ["easy, Jet", "Jet, Blue", "West, Jet"]
 replace_dict = {"easy, Jet":"easyJet", "Jet, Blue":"JetBlue", "West, Jet":"WestJet"}
 dict_cats = ["departure day","departure month","departure year","origin","destination","name","days","price","today",\
              "days ahead","flight duration","flight depart","flight arrive","stops","stops info"]
+
+def getAllFlightData(origin, destination, folder_location, exclusion_list):
+    files = [f for f in listdir(folder_location) if isfile(join(folder_location, f))]
+    files = [f for f in files if f not in exclusion_list]
+    aggregateDf = pd.DataFrame()
+    city_prefix1 = '_'.join([origin, destination])
+    city_prefix2 = '_'.join([destination, origin])
+    for f in files:
+        with open(folder_location+f, 'rb') as handle:
+            itin_dict = pickle.load(handle) 
+            for key in init_dict:
+                if city_prefix1 not in key and city_prefix2 not in key:
+                    continue
+                data = pd.DataFrame(itin_dict[key])
+                if aggregateDf.empty:
+                    aggregateDf = data
+                else:
+                    aggregateDf = pd.concat([aggregateDf, data], axis=0, ignore_index=True)
+    return aggregateDf
+
+def isEmpty(new_dict):
+    if new_dict==0:
+        return True
+    return False
+    
+def repairPkl(folder_location, exclusion_list):
+    files = [f for f in listdir(folder_location) if isfile(join(folder_location, f))]
+    files = [f for f in files if f not in exclusion_list and '.pkl' in f]
+    num_entries=0
+    for f in files:
+        print(f)
+        with open(folder_location+f, 'rb') as handle:
+            itin_dict = pickle.load(handle) 
+            key_list = list(itin_dict.keys())
+            for key in itin_dict:
+                new_dict = itin_dict[key]
+                if isEmpty(new_dict):
+                    continue
+                num_entries+=1
+                dep_date = key.split('_')[2]
+                dep_date_list = [dep_date]*len(new_dict["departure year"])
+                new_dict["departure date"] = dep_date_list
+                del new_dict["departure year"]
+                del new_dict["departure month"]
+                del new_dict["departure day"]
+                itin_dict[key] = new_dict
+
+        with open(folder_location+f, 'wb') as handle:
+            pickle.dump(itin_dict, handle, protocol=pickle.HIGHEST_PROTOCOL)  
+        print(num_entries," entries repaired")
+    
+
+def getItinDfFromAggDf(origin, destination, aggDf, duration, mode):
+    city_prefix1 = '_'.join([origin, destination])
+    city_prefix2 = '_'.join([destination, origin])
+    if mode=="domestic":
+        one_way_df = aggDf[(aggDf["origin"]==origin)&(aggDf["destination"]==destination)]
+        return_df = aggDf[(aggDf["origin"]==destination)&(aggDf["destination"]==origin)]
+        for index, row in one_way_df.iterrows():
+            dep_date = '-'.join([row["departure year"],row["departure month"],row["departure day"]])
 
 def modifyCaseChange(string):
     for i in range(1,len(string)):
@@ -44,11 +106,7 @@ def process_name(name):
             name = name.replace(i,replace_dict[i])
     return name
 
-def append_itin_to_dict(new_dict, fl, departure_day, departure_month, departure_year,\
-                       origin, destination, days_ahead, days):
-    new_dict["departure day"].append(departure_day)
-    new_dict["departure month"].append(departure_month)
-    new_dict["departure year"].append(departure_year)
+def append_itin_to_dict(new_dict, fl, departure_date, origin, destination, days_ahead, days):
     new_dict["origin"].append(origin)
     new_dict["destination"].append(destination)
     new_dict["name"].append(fl.name)
@@ -61,6 +119,7 @@ def append_itin_to_dict(new_dict, fl, departure_day, departure_month, departure_
     new_dict["flight arrive"].append(fl.arrival)
     new_dict["stops"].append(fl.stops)
     new_dict["stops info"].append(fl.stops_text)
+    new_dict["departure date"].append(departure_date)
     return new_dict
 
 def save_prog(itin_dict, name):
@@ -200,7 +259,6 @@ def update_dict(itin_dict, folder_path, date_today_file, mode):
             origin, destination, departure_date, return_date = key.split('_')
             days = (datetime.datetime.strptime(return_date, "%Y-%m-%d") - \
                     datetime.datetime.strptime(departure_date, "%Y-%m-%d")).days
-        departure_day, departure_month, departure_year = departure_date.split('-')
         days_ahead = (datetime.datetime.strptime(departure_date, "%Y-%m-%d") - datetime.datetime.today()).days
         new_dict={}
         new_dict=initialize_dict(new_dict)
@@ -216,8 +274,7 @@ def update_dict(itin_dict, folder_path, date_today_file, mode):
             continue    
         for i in range(len(result.flights)):
             fl = result.flights[i]
-            new_dict = append_itin_to_dict(new_dict, fl, departure_day, departure_month, departure_year,\
-                                                 origin, destination, days_ahead,days)
+            new_dict = append_itin_to_dict(new_dict, fl, departure_date,origin, destination, days_ahead,days)
         itin_dict[key] = new_dict
         save_prog_count+=1
         end = time.time()
