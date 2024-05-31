@@ -6,6 +6,9 @@ from fast_flights import FlightData, Passengers, create_filter, get_flights, Bag
 import pandas as pd
 import os.path
 import time
+from ipywidgets import IntProgress
+from IPython.display import display
+from tqdm.notebook import tqdm
 
 PROCESS_STR="Learn more"
 LOWERCASE_STR="abcdefghijklmnopqrstuvwxyz"
@@ -63,7 +66,7 @@ def append_itin_to_dict(new_dict, fl, departure_day, departure_month, departure_
 def save_prog(itin_dict, name):
     with open(name, 'wb') as handle:
         pickle.dump(itin_dict, handle, protocol=pickle.HIGHEST_PROTOCOL)  
-    print("file updated")
+#     print("file updated")
 
 #for domestic, search all one-way and two-way itineraries
 def gen_itineraries(city_pairs, itin_type, num_days, num_itins=100):
@@ -172,7 +175,17 @@ def gen_dict_from_itin(itin):
 def update_dict(itin_dict, folder_path, date_today_file, mode):
     save_prog_count=0
     num_unfinished=0
+    total_keys = len(itin_dict.keys())
+#     f = IntProgress(min=0, max=100) # instantiate the bar
+#     display(f)
+    progress_bar = tqdm(total=total_keys, desc='Processing')
+    key_num=0
     for key in itin_dict:
+#         f.value = int((key_num*100)/total_keys)
+        progress_bar.n = key_num
+        progress_bar.refresh()
+        progress_bar.set_postfix_str(f'{key_num}/{total_keys} itineraries complete')
+        key_num+=1
         if itin_dict[key]!=0:
             continue
         if save_prog_count==10:
@@ -215,6 +228,7 @@ def update_dict(itin_dict, folder_path, date_today_file, mode):
         end = time.time()
 #         print(key," completed")
 #         print("time_elapsed: ",end-start)
+    progress_bar.close()
     save_prog(itin_dict, folder_path+date_today_file)
     return num_unfinished
 
