@@ -3,7 +3,7 @@
 import base64
 from typing import Any, List, TYPE_CHECKING, Literal, Union
 
-from . import flights_pb2_new as PB
+from . import flights_pb2 as PB
 from ._generated_enum import Airport
 
 if TYPE_CHECKING:
