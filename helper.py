@@ -17,8 +17,8 @@ LOWERCASE_STR="abcdefghijklmnopqrstuvwxyz"
 UPPERCASE_STR = LOWERCASE_STR.upper()
 EXCEPT_LIST = ["easy, Jet", "Jet, Blue", "West, Jet"]
 replace_dict = {"easy, Jet":"easyJet", "Jet, Blue":"JetBlue", "West, Jet":"WestJet"}
-dict_cats = ["departure day","departure month","departure year","origin","destination","name","days","price","today",\
-             "days ahead","flight duration","flight depart","flight arrive","stops","stops info"]
+dict_cats = ["origin","destination","name","days","price","today",\
+             "days ahead","flight duration","flight depart","flight arrive","stops","stops info","departure date"]
 
 def getAllFlightData(origin, destination, folder_location, exclusion_list):
     files = [f for f in listdir(folder_location) if isfile(join(folder_location, f))]
