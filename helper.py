@@ -78,14 +78,15 @@ def getItinDfFromAggDf(origin, destination, aggDf, duration, mode):
         one_way_df = aggDf[(aggDf["origin"]==origin)&(aggDf["destination"]==destination)]
         return_df = aggDf[(aggDf["origin"]==destination)&(aggDf["destination"]==origin)]
         for index, row in one_way_df.iterrows():
-            dep_date = '-'.join([row["departure year"],row["departure month"],row["departure day"]])
+            dep_date = datetime.datetime.strptime(row["departure date"], "%Y-%m-%d")
+            target_date = (dep_date + datetime.timedelta(days=duration)).strftime('%Y-%m-%d')
+            return_flight = return_df[return_df["departure date"]==target_date]
 
 def modifyCaseChange(string):
     for i in range(1,len(string)):
         if string[i] in UPPERCASE_STR and string[i-1] in LOWERCASE_STR:
             return [string[:i],string[i:]]
     return [string]
-    
 
 def process_name(name):
     if PROCESS_STR in name:
@@ -239,11 +240,13 @@ def update_dict(itin_dict, folder_path, date_today_file, mode):
 #     display(f)
     progress_bar = tqdm(total=total_keys, desc='Processing')
     key_num=0
+    total_flights_found=1
+    total_routes_searched = 1
     for key in itin_dict:
 #         f.value = int((key_num*100)/total_keys)
         progress_bar.n = key_num
         progress_bar.refresh()
-        progress_bar.set_postfix_str(f'{key_num}/{total_keys} itineraries complete')
+        progress_bar.set_postfix_str(f'{total_flights_found/total_routes_searched}/{total_routes_searched} avg flights')
         key_num+=1
         if itin_dict[key]!=0:
             continue
@@ -271,7 +274,9 @@ def update_dict(itin_dict, folder_path, date_today_file, mode):
             continue
         if len(result.flights)==0:
             num_unfinished+=1
-            continue    
+            continue 
+        total_flights_found+= len(result.flights) 
+        total_routes_searched+=1
         for i in range(len(result.flights)):
             fl = result.flights[i]
             new_dict = append_itin_to_dict(new_dict, fl, departure_date,origin, destination, days_ahead,days)
