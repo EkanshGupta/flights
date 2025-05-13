@@ -2,7 +2,6 @@
 import streamlit as st
 import pandas as pd
 import sqlite3
-from tqdm import tqdm
 import numpy as np
 
 domestic_city_pairs = [
@@ -145,10 +144,24 @@ def main():
                 if days_selected != "All":
                     filtered = filtered[filtered['days'] == int(days_selected)]
                 filtered = filtered.sort_values(by="price_float", ascending=True)
-                st.write(f"Filtered results: {len(filtered)} rows. Displaying {min(len(filtered), 10000)} rows")
-                st.dataframe(filtered.head(10000))
-    else:
-        st.info("Use the sidebar to load data.")
+                st.session_state.filtered = filtered 
+                
+                st.subheader("Filtered Flight Results")
+                filtered['departure_date'] = filtered['departure_date'].dt.strftime("%Y-%m-%d")
+                st.dataframe(filtered.head(1000), use_container_width=True)
+
+                flight_summary = (
+                    filtered.groupby(['name','departure_date', 'flight_depart', 'flight_arrive', 'flight_duration','stops','days'])
+                    .agg(min_price=('price_float', 'min'), max_price=('price_float', 'max'))
+                    .reset_index()
+                    .sort_values(by=['departure_date', 'flight_depart'])
+                )
+
+                st.subheader("Flight Price Summary (Min and Max)")
+                st.dataframe(flight_summary, use_container_width=True)
+
+        else:
+            st.info("Use the sidebar to load data.")
         
 if __name__ == "__main__":
     main()
