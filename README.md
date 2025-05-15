@@ -1,34 +1,118 @@
-<div align="center">
-    
-## Flight Database 
-    
-</div>
+# Flight Database Aggregator & Visual Explorer
 
-I modified the original fork to add some new features
+I have made some modifications to the original fork. This project collects and visualizes **round-trip international** and **one-way domestic** airfare data between Atlanta (ATL) and various global destinations. It includes:
 
-1. You can now add a carry-on or a checked bag in the request
-2. The code also returns the price of the each flight and the information about stops (number of stops, stoppage airports and timings)
-3. You can now specify a list of airports of interest and the number of days in a desired itinerary and the algorithm will aggregate all itineries from today to one year from now and add it to a dictionary
-4. For domestic itineraries, it searches every day until one-year from now and on international flights, it searches 100 random dates with the fixed duration and stores them
-    
-This code makes roughly 700 and 100 google flight queries per run for domestic and international itineraries respectively
-    
-The code only runs using protobuf 3.20.0 Install it using
-    
-```python
-    
-   pip install protobuf==3.20. 
-    
+- A **data pipeline** to scrape and construct SQLite databases of flight itineraries.
+- An interactive **Streamlit web app** to explore, filter, and analyze airfare trends by airline, duration, stops, date, and more.
+
+---
+
+## Project Overview
+
+I have made some modifications to the original fork. This module handles:
+
+- Generating flight itineraries (date and destination pairs). For domestic itineraries, it searches every day until one year from now, and on international flights, it searches 100 random dates with the fixed duration and stores them. This code makes roughly 700 and 100 Google flight queries per run for domestic and international itineraries, respectively.
+- Querying a flight API to get pricing and schedule data
+- Organizing scraped results into dictionaries
+- Aggregating those itineraries into an SQL database
+
+The SQL dataset for both domestic and international db files needs to be stored in the logs/ folder and can be downloaded [here](https://huggingface.co/datasets/egupta/atl-dom-flight-data-sql-db) and [here](https://huggingface.co/datasets/egupta/atl-intl-flight-data-sql-db)
+
+
+### `app.py` – Streamlit Visualization Interface
+
+This is a full-featured Streamlit app to explore flight pricing from the generated SQLite databases.
+
+Users can:
+- Load data based on origin/destination
+- Filter by date, price range, number of stops, airline, or trip duration
+- View full flight results or a summarized table showing min/max prices per flight
+- Explore trends in a fully interactive GUI
+
+To run the app:
+```bash
+streamlit run app.py
 ```
-It also requires tqdm for progress bar updates. Install the following dependencies for the code to run
 
-```python
-pip install --upgrade google-api-python-client
-pip install selectolax
-pip install tqdm
+---
 
+## Dataset Details
 
+### City Pairs Covered
+
+#### Domestic
+All one-way flights between ATL and:
 ```
+SEA, DEN, LIH, OGG, SAN, SFO, DFW, LAS, PHX, BOS
+```
+
+#### International
+Round-trip itineraries from ATL to:
+```
+FCO (Rome), DEL (Delhi), CDG (Paris), FRA (Frankfurt), 
+LHR (London), ATH (Athens), CAI (Cairo), CUN (Cancun), HND (Tokyo)
+```
+
+Durations vary by destination (e.g., 5–13 days for Europe, 21–33 for India).
+
+## File Formats
+
+### `.db` Files (SQLite)
+- Final datasets are saved in SQLite DBs:
+  - `dataDB_domestic.db`
+  - `dataDB_intl.db`
+
+Each contains a `data_table` with schema:
+
+| Column         | Description                          |
+|----------------|--------------------------------------|
+| origin         | Origin airport (e.g. ATL)            |
+| destination    | Destination airport                  |
+| name           | Airline/flight name                  |
+| days           | Trip duration                        |
+| price          | Price string (e.g. "$495")           |
+| today          | Date of scraping                     |
+| days_ahead     | Advance booking time (in days)       |
+| flight_duration| Duration of flight (e.g. "10h 20m")  |
+| flight_depart  | Departure time                       |
+| flight_arrive  | Arrival time                         |
+| stops          | Number of stops                      |
+| stops_info     | Stopover details                     |
+| departure_date | Date of outbound flight              |
+
+
+## Example Workflow
+
+1. **Scrape flights** for 180 days ahead:
+   ```python
+   itins = gen_itineraries([...], "intl", 180, 100)
+   ```
+2. **Save raw data** as `*.pkl`
+3. **Build `.db` file** with:
+   ```python
+   createDBFromDictFiles("dataDB", "intl", "./logs/")
+   ```
+4. **Visualize** in Streamlit:
+   ```bash
+   streamlit run app.py
+   ```
+
+
+## Notes
+
+- `.pkl` files are intermediate and can be removed.
+- SQLite `.db` files are optimized for querying and visualization.
+- The scraper depends on a custom `fast_flights` API wrapper.
+
+
+## Acknowledgments
+
+- Data sourced from flight API via `fast_flights`
+- Visualization powered by Streamlit
+
+---
+# Original Repo README begins from here
+---
 
 The fast, robust, strongly-typed Google Flights scraper (API) implemented in Python. Based on Base64-encoded Protobuf string.
 
