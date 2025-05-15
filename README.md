@@ -34,6 +34,8 @@ To run the app:
 streamlit run app.py
 ```
 
+![Sample Screenshot](./images/app.png)
+
 ---
 
 ## Dataset Details
